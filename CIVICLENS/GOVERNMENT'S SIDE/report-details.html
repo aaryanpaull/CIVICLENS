@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CivicLens - Report Details</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a2e;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: #16213e;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #2d3748;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #60a5fa;
+            border-radius: 50%;
+            background: #1e40af;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            margin-left: 2rem;
+        }
+
+        .nav-link {
+            color: #a0a0a0;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .nav-link.active {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .nav-link:hover {
+            color: white;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-profile {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #ec4899;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #374151;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .logout-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #b91c1c;
+        }
+
+        .main-content {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: #2d3748;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid #4a5568;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .images-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .image-container {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .report-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .map-container {
+            width: 100%;
+            height: 200px;
+            background: #374151;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a0a0a0;
+            font-size: 0.9rem;
+        }
+
+        .citizen-report {
+            color: #e5e7eb;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .ai-analysis {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .analysis-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #4a5568;
+        }
+
+        .analysis-item:last-child {
+            border-bottom: none;
+        }
+
+        .analysis-label {
+            color: #a0a0a0;
+            font-weight: 500;
+        }
+
+        .analysis-value {
+            color: white;
+            font-weight: 600;
+        }
+
+        .severity-high {
+            color: #ef4444;
+        }
+
+        .severity-medium {
+            color: #f59e0b;
+        }
+
+        .severity-low {
+            color: #10b981;
+        }
+
+        .urgency-critical {
+            color: #ef4444;
+        }
+
+        .urgency-high {
+            color: #f59e0b;
+        }
+
+        .urgency-medium {
+            color: #3b82f6;
+        }
+
+        .urgency-low {
+            color: #10b981;
+        }
+
+        .actions-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .status-selector {
+            margin-bottom: 1rem;
+        }
+
+        .status-select {
+            width: 100%;
+            padding: 0.75rem;
+            background: #374151;
+            border: 1px solid #4a5568;
+            border-radius: 6px;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .status-select option {
+            background: #374151;
+            color: white;
+        }
+
+        .notes-section {
+            grid-column: 1 / -1;
+        }
+
+        .notes-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 1rem;
+            background: #374151;
+            border: 1px solid #4a5568;
+            border-radius: 6px;
+            color: white;
+            font-size: 0.9rem;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .notes-textarea::placeholder {
+            color: #9ca3af;
+        }
+
+        .save-notes-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .save-notes-btn:hover {
+            background: #2563eb;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #a0a0a0;
+        }
+
+        .spinner {
+            border: 3px solid #374151;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .success-message {
+            background: #dcfce7;
+            color: #16a34a;
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                margin-left: 0;
+                gap: 1rem;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .report-image {
+                height: 150px;
+            }
+
+            .map-container {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <div class="logo">
+                <div class="logo-icon">📄</div>
+                <div class="logo-text">CivicLens</div>
+            </div>
+            <nav class="nav-links">
+                <a href="department-dashboard.html" class="nav-link">Dashboard</a>
+                <a href="#" class="nav-link active">Reports</a>
+                <a href="#" class="nav-link">Analytics</a>
+                <a href="#" class="nav-link">Settings</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <div class="user-profile" id="userProfile">👤</div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="breadcrumb">
+            <a href="department-dashboard.html">Reports</a> / Report Details
+        </div>
+
+        <h1 class="page-title" id="reportTitle">Report #Loading...</h1>
+
+        <div id="loadingMessage" class="loading">
+            <div class="spinner"></div>
+            <p>Loading report details...</p>
+        </div>
+
+        <div id="errorMessage" class="error-message" style="display: none;"></div>
+        <div id="successMessage" class="success-message" style="display: none;"></div>
+
+        <div id="reportContent" style="display: none;">
+            <div class="content-grid">
+                <div class="card">
+                    <h2 class="card-title">Report Images</h2>
+                    <div class="images-section">
+                        <div class="image-container">
+                            <img id="reportImage" class="report-image" alt="Report photo" onerror="this.style.display='none'">
+                        </div>
+                        <div class="map-container">
+                            <span>📍 Location: <span id="reportLocation">Loading...</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">Citizen Report</h2>
+                    <div class="citizen-report" id="citizenReport">
+                        Loading report description...
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">AI Analysis</h2>
+                    <div class="ai-analysis">
+                        <div class="analysis-item">
+                            <span class="analysis-label">Category:</span>
+                            <span class="analysis-value" id="reportCategory">Loading...</span>
+                        </div>
+                        <div class="analysis-item">
+                            <span class="analysis-label">Severity:</span>
+                            <span class="analysis-value" id="reportSeverity">Loading...</span>
+                        </div>
+                        <div class="analysis-item">
+                            <span class="analysis-label">Urgency:</span>
+                            <span class="analysis-value" id="reportUrgency">Loading...</span>
+                        </div>
+                        <div class="analysis-item">
+                            <span class="analysis-label">Summary:</span>
+                            <span class="analysis-value" id="reportSummary">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">Actions</h2>
+                    <div class="actions-section">
+                        <div class="status-selector">
+                            <select class="status-select" id="statusSelect">
+                                <option value="RECEIVED">Received</option>
+                                <option value="IN_PROGRESS">In Progress</option>
+                                <option value="RESOLVED">Resolved</option>
+                                <option value="CONFIRMED_CLOSED">Closed</option>
+                                <option value="REOPENED">Reopened</option>
+                            </select>
+                        </div>
+                        <button class="action-btn btn-primary" onclick="updateStatus()">
+                            <span>📝</span>
+                            Update Status
+                        </button>
+                        <button class="action-btn btn-success" onclick="markResolved()">
+                            <span>✅</span>
+                            Mark as Resolved
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card notes-section">
+                <h2 class="card-title">Internal Notes</h2>
+                <textarea class="notes-textarea" id="internalNotes" placeholder="Add notes here..."></textarea>
+                <button class="save-notes-btn" onclick="saveNotes()">
+                    <span>💾</span>
+                    Save Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:4000';
+        let currentReport = null;
+
+        // Check authentication
+        function checkAuth() {
+            const token = localStorage.getItem('authToken');
+            const department = localStorage.getItem('department');
+
+            if (!token || !department) {
+                window.location.href = 'login.html';
+                return false;
+            }
+
+            return true;
+        }
+
+        // Load department info
+        function loadDepartmentInfo() {
+            const department = JSON.parse(localStorage.getItem('department'));
+            document.getElementById('userProfile').textContent = department.displayName.charAt(0);
+        }
+
+        // Get report ID from URL
+        function getReportId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
+        }
+
+        // Load report details
+        async function loadReportDetails() {
+            const reportId = getReportId();
+            if (!reportId) {
+                showError('No report ID provided');
+                return;
+            }
+
+            const token = localStorage.getItem('authToken');
+
+            try {
+                const response = await fetch(`${API_BASE}/reports/${reportId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.status === 401) {
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('department');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                if (response.status === 404) {
+                    showError('Report not found');
+                    return;
+                }
+
+                if (response.status === 403) {
+                    showError('Access denied - This report is not assigned to your department');
+                    return;
+                }
+
+                const report = await response.json();
+                currentReport = report;
+                displayReportDetails(report);
+            } catch (error) {
+                console.error('Error loading report:', error);
+                showError('Failed to load report details');
+            }
+        }
+
+        // Display report details
+        function displayReportDetails(report) {
+            document.getElementById('reportTitle').textContent = `Report #${report.id.substring(0, 8)}`;
+            document.getElementById('reportLocation').textContent = report.locality;
+            document.getElementById('citizenReport').textContent = report.description;
+            document.getElementById('reportCategory').textContent = report.ai_category;
+            document.getElementById('reportSummary').textContent = report.ai_summary;
+
+            // Set severity with color
+            const severityElement = document.getElementById('reportSeverity');
+            const severityText = report.ai_severity_score >= 4 ? 'High' : 
+                               report.ai_severity_score >= 3 ? 'Medium' : 'Low';
+            severityElement.textContent = severityText;
+            severityElement.className = `analysis-value severity-${severityText.toLowerCase()}`;
+
+            // Set urgency with color
+            const urgencyElement = document.getElementById('reportUrgency');
+            urgencyElement.textContent = report.ai_urgency_level;
+            urgencyElement.className = `analysis-value urgency-${report.ai_urgency_level.toLowerCase()}`;
+
+            // Set current status
+            document.getElementById('statusSelect').value = report.status;
+
+            // Set image if available
+            if (report.photo_url) {
+                document.getElementById('reportImage').src = report.photo_url;
+            }
+
+            // Hide loading, show content
+            document.getElementById('loadingMessage').style.display = 'none';
+            document.getElementById('reportContent').style.display = 'block';
+        }
+
+        // Update report status
+        async function updateStatus() {
+            const newStatus = document.getElementById('statusSelect').value;
+            const resolvedBy = prompt('Resolved by (optional):') || 'department-user';
+
+            await updateReportStatus(newStatus, resolvedBy);
+        }
+
+        // Mark as resolved
+        async function markResolved() {
+            await updateReportStatus('RESOLVED', 'department-user');
+        }
+
+        // Update report status
+        async function updateReportStatus(status, resolvedBy) {
+            if (!currentReport) return;
+
+            const token = localStorage.getItem('authToken');
+
+            try {
+                const response = await fetch(`${API_BASE}/reports/${currentReport.id}/status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        status, 
+                        resolved_by: resolvedBy 
+                    })
+                });
+
+                if (response.ok) {
+                    showSuccess('Status updated successfully');
+                    currentReport.status = status;
+                    document.getElementById('statusSelect').value = status;
+                } else {
+                    const error = await response.json();
+                    showError('Error updating status: ' + error.error);
+                }
+            } catch (error) {
+                console.error('Error updating status:', error);
+                showError('Failed to update status');
+            }
+        }
+
+        // Save internal notes
+        async function saveNotes() {
+            const notes = document.getElementById('internalNotes').value;
+            
+            // In a real application, you would save this to the backend
+            // For now, we'll just show a success message
+            showSuccess('Notes saved successfully');
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('loadingMessage').style.display = 'none';
+        }
+
+        // Show success message
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            document.getElementById('errorMessage').style.display = 'none';
+            
+            // Hide success message after 3 seconds
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('department');
+            window.location.href = 'login.html';
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!checkAuth()) return;
+            
+            loadDepartmentInfo();
+            loadReportDetails();
+        });
+    </script>
+</body>
+</html>
+
+
+

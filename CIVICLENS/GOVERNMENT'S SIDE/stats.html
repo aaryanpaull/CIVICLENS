@@ -1,0 +1,159 @@
+<!-- stats.html -->
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Statistics</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans">
+  <header class="flex justify-between items-center h-16 border-b border-gray-700 px-6">
+    <div class="flex items-center gap-2">
+      <span class="inline-block w-3 h-3 rounded-sm bg-indigo-500"></span>
+      <h1 class="text-xl font-bold">CivicLens</h1>
+      <nav class="hidden md:flex items-center gap-2 ml-6 text-sm text-gray-400">
+        <a href="dashboard.html" class="px-2 py-1 hover:text-gray-200">Dashboard</a>
+        <a href="leaderboard.html" class="px-2 py-1 hover:text-gray-200">Leaderboard</a>
+        <span class="px-2 py-1 rounded bg-gray-800 text-gray-200">Statistics</span>
+      </nav>
+    </div>
+    <div class="flex items-center gap-3">
+      <button id="logoutBtn" class="text-sm text-gray-300 hover:text-red-400">Logout</button>
+    </div>
+  </header>
+
+  <main class="p-6 max-w-6xl mx-auto">
+    <h2 class="text-2xl font-bold mb-1">Citywide Statistics</h2>
+    <p class="text-sm text-gray-400 mb-4">Aggregated from the same dataset as the dashboard.</p>
+
+    <section id="kpis" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6"></section>
+
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
+        <h3 class="font-semibold mb-2">Reports by Status</h3>
+        <div id="statusBars" class="space-y-2"></div>
+      </div>
+      <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
+        <h3 class="font-semibold mb-2">Reports by Department</h3>
+        <div id="deptBars" class="space-y-2"></div>
+      </div>
+      <div class="bg-gray-800 border border-gray-700 rounded-lg p-4 lg:col-span-2">
+        <h3 class="font-semibold mb-2">Average Severity by Department</h3>
+        <table class="min-w-full text-sm">
+          <thead class="text-gray-400 uppercase text-xs">
+            <tr>
+              <th class="text-left py-2">Department</th>
+              <th class="text-right py-2">Reports</th>
+              <th class="text-right py-2">Avg Severity</th>
+              <th class="text-right py-2">Open</th>
+              <th class="text-right py-2">Resolved</th>
+            </tr>
+          </thead>
+          <tbody id="deptTable" class="divide-y divide-gray-700"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Check for department authentication
+    const deptAuth = localStorage.getItem('DEPT_AUTH');
+    if (!deptAuth) {
+      window.location.href = 'index.html';
+    }
+    document.getElementById('logoutBtn').addEventListener('click', ()=>{
+      localStorage.removeItem('DEPT_AUTH');
+      window.location.href = 'index.html';
+    });
+
+    function departmentFor(category){
+      const map = {
+        'roads':'Roads', 'waste':'Waste Management', 'infra':'Infrastructure', 'light':'Street Lighting',
+        'water and sewage':'Water and Sewage', 'vandal':'Political Issues / Vandalism', 'political':'Political Issues / Vandalism',
+        'health':'Public Health & Sanitation', 'sanitation':'Public Health & Sanitation', 'park':'Parks & Green Spaces', 'green':'Parks & Green Spaces',
+        'encroach':'Encroachments & Illegal Constructions', 'illegal':'Encroachments & Illegal Constructions', 'construction':'Encroachments & Illegal Constructions',
+        'noise':'Noise & Air Pollution','air':'Noise & Air Pollution','flood':'Flooding & Drainage','drain':'Flooding & Drainage',
+        'traffic':'Traffic & Parking Issues','parking':'Traffic & Parking Issues','electric':'Electricity & Power Supply','transport':'Public Transport & Bus Stops','bus':'Public Transport & Bus Stops',
+        'drinking water':'Drinking Water Quality'
+      };
+      const c = String(category||'').toLowerCase();
+      for(const k in map){ if(c.includes(k)) return map[k]; }
+      return category || 'Other';
+    }
+
+    async function getReports(){
+      const local = JSON.parse(localStorage.getItem('DEMO_REPORTS')||'null');
+      if(Array.isArray(local)) return local;
+      try{
+        const res = await fetch('/reports');
+        if(res.ok) return await res.json();
+      }catch{}
+      const seed = await (await fetch('seed/sample_reports.json')).json();
+      return seed;
+    }
+
+    function bar(label, value, max){
+      const pct = max? Math.round((value/max)*100): 0;
+      return `<div>
+        <div class=\"flex justify-between text-xs text-gray-300\"><span>${label}</span><span>${value}</span></div>
+        <div class=\"h-2 bg-gray-700 rounded\"><div class=\"h-2 bg-indigo-500 rounded\" style=\"width:${pct}%\"></div></div>
+      </div>`;
+    }
+
+    (async function init(){
+      const list = await getReports();
+      const statusCounts = {};
+      const deptMap = {};
+      let totalSeverity = 0;
+      for(const r of list){
+        statusCounts[r.status] = (statusCounts[r.status]||0)+1;
+        const dept = departmentFor(r.ai_category);
+        if(!deptMap[dept]) deptMap[dept] = {count:0, severity:0, resolved:0, open:0};
+        deptMap[dept].count++;
+        deptMap[dept].severity += Number(r.ai_severity_score||0);
+        if(r.status==='RESOLVED' || r.status==='CONFIRMED_CLOSED') deptMap[dept].resolved++; else deptMap[dept].open++;
+        totalSeverity += Number(r.ai_severity_score||0);
+      }
+
+      const total = list.length;
+      const resolved = (statusCounts['RESOLVED']||0) + (statusCounts['CONFIRMED_CLOSED']||0);
+      const open = total - resolved;
+      const avgSeverity = total? (totalSeverity/total).toFixed(2) : '-';
+
+      const kpis = document.getElementById('kpis');
+      const kpi = (title, value, tone) => `<div class=\"bg-gray-800 border border-gray-700 rounded-lg p-4\"><div class=\"text-xs text-gray-400\">${title}</div><div class=\"text-2xl font-bold ${tone||''}\">${value}</div></div>`;
+      kpis.innerHTML = [
+        kpi('Total Reports', total),
+        kpi('Open Reports', open, 'text-yellow-300'),
+        kpi('Resolved', resolved, 'text-emerald-300'),
+        kpi('Average Severity', avgSeverity)
+      ].join('');
+
+      // Status bars
+      const statusBars = document.getElementById('statusBars');
+      const maxStatus = Math.max(...Object.values(statusCounts));
+      statusBars.innerHTML = Object.entries(statusCounts).sort((a,b)=>b[1]-a[1]).map(([k,v])=> bar(k.replace('_',' '), v, maxStatus)).join('');
+
+      // Dept bars
+      const deptBars = document.getElementById('deptBars');
+      const maxDept = Math.max(...Object.values(deptMap).map(d=>d.count));
+      deptBars.innerHTML = Object.entries(deptMap).sort((a,b)=>b[1].count-a[1].count).map(([name,d])=> bar(name, d.count, maxDept)).join('');
+
+      // Dept table
+      const tbody = document.getElementById('deptTable');
+      const rows = Object.entries(deptMap).map(([name,d])=> ({name, ...d, avg: (d.severity/Math.max(1,d.count)).toFixed(2)}))
+        .sort((a,b)=> b.count-a.count);
+      tbody.innerHTML = rows.map(r=> `<tr>
+        <td class=\"py-2\">${r.name}</td>
+        <td class=\"py-2 text-right\">${r.count}</td>
+        <td class=\"py-2 text-right\">${r.avg}</td>
+        <td class=\"py-2 text-right\">${r.open}</td>
+        <td class=\"py-2 text-right\">${r.resolved}</td>
+      </tr>`).join('');
+    })();
+  </script>
+</body>
+</html>
+
+

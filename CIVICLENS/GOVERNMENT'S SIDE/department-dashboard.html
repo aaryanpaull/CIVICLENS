@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CivicLens - Department Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a2e;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: #16213e;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #2d3748;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #60a5fa;
+            border-radius: 50%;
+            background: #1e40af;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            margin-left: 2rem;
+        }
+
+        .nav-link {
+            color: #a0a0a0;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .nav-link.active {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .nav-link:hover {
+            color: white;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-bar {
+            position: relative;
+        }
+
+        .search-input {
+            background: #2d3748;
+            border: 1px solid #4a5568;
+            border-radius: 6px;
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            color: white;
+            width: 250px;
+        }
+
+        .search-input::placeholder {
+            color: #a0a0a0;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a0a0a0;
+        }
+
+        .user-profile {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #ec4899;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #374151;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .logout-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #b91c1c;
+        }
+
+        .main-content {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: #a0a0a0;
+            font-size: 1rem;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .filter-label {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+        }
+
+        .filter-select {
+            background: #2d3748;
+            border: 1px solid #4a5568;
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            color: white;
+            cursor: pointer;
+        }
+
+        .filter-select option {
+            background: #2d3748;
+            color: white;
+        }
+
+        .sort-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .reports-table {
+            background: #2d3748;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #4a5568;
+        }
+
+        .table-header {
+            background: #1e293b;
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: 120px 100px 1fr 120px 150px 120px 120px;
+            gap: 1rem;
+            font-weight: 600;
+            color: white;
+            border-bottom: 1px solid #4a5568;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 120px 100px 1fr 120px 150px 120px 120px;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid #374151;
+            transition: background 0.3s;
+        }
+
+        .table-row:hover {
+            background: #374151;
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .urgency-tag {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .urgency-critical {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .urgency-high {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .urgency-medium {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .urgency-low {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .severity {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+        }
+
+        .ai-summary {
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .category {
+            color: #60a5fa;
+            font-size: 0.9rem;
+        }
+
+        .location {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+        }
+
+        .date {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+        }
+
+        .status-tag {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .status-open {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .status-in-progress {
+            background: #e9d5ff;
+            color: #7c3aed;
+        }
+
+        .status-resolved {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .status-closed {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .status-reopened {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #a0a0a0;
+        }
+
+        .spinner {
+            border: 3px solid #374151;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .no-reports {
+            text-align: center;
+            padding: 3rem;
+            color: #a0a0a0;
+        }
+
+        .no-reports h3 {
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        @media (max-width: 1200px) {
+            .table-header,
+            .table-row {
+                grid-template-columns: 100px 80px 1fr 100px 120px 100px 100px;
+                gap: 0.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                margin-left: 0;
+                gap: 1rem;
+            }
+
+            .search-input {
+                width: 200px;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .table-header,
+            .table-row {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+
+            .table-header {
+                display: none;
+            }
+
+            .table-row {
+                display: block;
+                padding: 1rem;
+                margin-bottom: 1rem;
+                border-radius: 6px;
+                background: #374151;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <div class="logo">
+                <div class="logo-icon">📄</div>
+                <div class="logo-text">CivicLens</div>
+            </div>
+            <nav class="nav-links">
+                <a href="#" class="nav-link active">Dashboard</a>
+                <a href="#" class="nav-link">Reports</a>
+                <a href="#" class="nav-link">Analytics</a>
+                <a href="#" class="nav-link">Settings</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <div class="search-bar">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" placeholder="Search reports..." id="searchInput">
+            </div>
+            <div class="user-profile" id="userProfile">👤</div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">Dashboard</h1>
+            <p class="page-subtitle">Manage and respond to citizen reports.</p>
+        </div>
+
+        <div class="controls">
+            <div class="filter-group">
+                <span class="filter-label">Filter by:</span>
+                <select class="filter-select" id="statusFilter">
+                    <option value="all">Status</option>
+                    <option value="RECEIVED">Open</option>
+                    <option value="IN_PROGRESS">In Progress</option>
+                    <option value="RESOLVED">Resolved</option>
+                    <option value="CONFIRMED_CLOSED">Closed</option>
+                    <option value="REOPENED">Reopened</option>
+                </select>
+                <select class="filter-select" id="categoryFilter">
+                    <option value="all">Category</option>
+                </select>
+            </div>
+            <div class="sort-group">
+                <span class="filter-label">Sort by:</span>
+                <select class="filter-select" id="sortBy">
+                    <option value="urgency">Urgency</option>
+                    <option value="severity">Severity</option>
+                    <option value="date">Date Reported</option>
+                    <option value="status">Status</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="reports-table">
+            <div class="table-header">
+                <div>URGENCY</div>
+                <div>SEVERITY</div>
+                <div>AI SUMMARY</div>
+                <div>CATEGORY</div>
+                <div>LOCATION</div>
+                <div>DATE REPORTED</div>
+                <div>STATUS</div>
+            </div>
+            <div id="reportsList">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading reports...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:4000';
+        let currentReports = [];
+        let currentStatusFilter = 'all';
+        let currentCategoryFilter = 'all';
+        let currentSortBy = 'urgency';
+        let searchQuery = '';
+
+        // Check authentication
+        function checkAuth() {
+            const token = localStorage.getItem('authToken');
+            const department = localStorage.getItem('department');
+
+            if (!token || !department) {
+                window.location.href = 'login.html';
+                return false;
+            }
+
+            return true;
+        }
+
+        // Load department info
+        function loadDepartmentInfo() {
+            const department = JSON.parse(localStorage.getItem('department'));
+            document.getElementById('userProfile').textContent = department.displayName.charAt(0);
+        }
+
+        // Load reports
+        async function loadReports() {
+            const token = localStorage.getItem('authToken');
+
+            try {
+                const response = await fetch(`${API_BASE}/reports/department`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.status === 401) {
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('department');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                const reports = await response.json();
+                currentReports = reports;
+                populateCategoryFilter(reports);
+                displayReports(reports);
+            } catch (error) {
+                console.error('Error loading reports:', error);
+                document.getElementById('reportsList').innerHTML = `
+                    <div class="error-message">
+                        Failed to load reports. Please check if the server is running.
+                    </div>
+                `;
+            }
+        }
+
+        // Populate category filter
+        function populateCategoryFilter(reports) {
+            const categories = [...new Set(reports.map(r => r.ai_category))];
+            const categoryFilter = document.getElementById('categoryFilter');
+            
+            // Clear existing options except "all"
+            categoryFilter.innerHTML = '<option value="all">Category</option>';
+            
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categoryFilter.appendChild(option);
+            });
+        }
+
+        // Sort reports
+        function sortReports(reports) {
+            return [...reports].sort((a, b) => {
+                switch (currentSortBy) {
+                    case 'urgency':
+                        const urgencyOrder = { 'CRITICAL': 4, 'HIGH': 3, 'MEDIUM': 2, 'LOW': 1 };
+                        return urgencyOrder[b.ai_urgency_level] - urgencyOrder[a.ai_urgency_level];
+                    case 'severity':
+                        return b.ai_severity_score - a.ai_severity_score;
+                    case 'date':
+                        return new Date(b.created_at) - new Date(a.created_at);
+                    case 'status':
+                        return a.status.localeCompare(b.status);
+                    default:
+                        return 0;
+                }
+            });
+        }
+
+        // Filter and search reports
+        function filterReports(reports) {
+            let filtered = reports;
+
+            // Filter by status
+            if (currentStatusFilter !== 'all') {
+                filtered = filtered.filter(r => r.status === currentStatusFilter);
+            }
+
+            // Filter by category
+            if (currentCategoryFilter !== 'all') {
+                filtered = filtered.filter(r => r.ai_category === currentCategoryFilter);
+            }
+
+            // Search filter
+            if (searchQuery) {
+                const query = searchQuery.toLowerCase();
+                filtered = filtered.filter(r => 
+                    r.ai_summary.toLowerCase().includes(query) ||
+                    r.locality.toLowerCase().includes(query) ||
+                    r.ai_category.toLowerCase().includes(query) ||
+                    r.description.toLowerCase().includes(query)
+                );
+            }
+
+            return filtered;
+        }
+
+        // Display reports in table format
+        function displayReports(reports) {
+            const filteredReports = filterReports(reports);
+            const sortedReports = sortReports(filteredReports);
+
+            if (sortedReports.length === 0) {
+                document.getElementById('reportsList').innerHTML = `
+                    <div class="no-reports">
+                        <h3>No reports found</h3>
+                        <p>No reports match the current filters.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const reportsHTML = sortedReports.map(report => {
+                const urgencyClass = report.ai_urgency_level.toLowerCase();
+                const statusClass = report.status.toLowerCase().replace('_', '-');
+                const severityText = report.ai_severity_score >= 4 ? 'High' : 
+                                   report.ai_severity_score >= 3 ? 'Medium' : 'Low';
+                
+                return `
+                    <div class="table-row" onclick="openReportDetails('${report.id}')" style="cursor: pointer;">
+                        <div>
+                            <span class="urgency-tag urgency-${urgencyClass}">
+                                ${report.ai_urgency_level}
+                            </span>
+                        </div>
+                        <div class="severity">${severityText}</div>
+                        <div class="ai-summary">${report.ai_summary}</div>
+                        <div class="category">${report.ai_category}</div>
+                        <div class="location">${report.locality}</div>
+                        <div class="date">${new Date(report.created_at).toLocaleDateString()}</div>
+                        <div>
+                            <span class="status-tag status-${statusClass}">
+                                ${report.status.replace('_', ' ')}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('reportsList').innerHTML = reportsHTML;
+        }
+
+        // Update filters and display
+        function updateDisplay() {
+            displayReports(currentReports);
+        }
+
+        // Open report details
+        function openReportDetails(reportId) {
+            window.location.href = `report-details.html?id=${reportId}`;
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('department');
+            window.location.href = 'login.html';
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!checkAuth()) return;
+            
+            loadDepartmentInfo();
+            loadReports();
+
+            // Add event listeners
+            document.getElementById('statusFilter').addEventListener('change', (e) => {
+                currentStatusFilter = e.target.value;
+                updateDisplay();
+            });
+
+            document.getElementById('categoryFilter').addEventListener('change', (e) => {
+                currentCategoryFilter = e.target.value;
+                updateDisplay();
+            });
+
+            document.getElementById('sortBy').addEventListener('change', (e) => {
+                currentSortBy = e.target.value;
+                updateDisplay();
+            });
+
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                updateDisplay();
+            });
+        });
+    </script>
+</body>
+</html>

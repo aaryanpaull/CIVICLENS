@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CivicLens Authority - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+        }
+
+        .header {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header-icon {
+            width: 24px;
+            height: 24px;
+            background: #3b82f6;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .header-text {
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .login-container {
+            background: #2d2d44;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 420px;
+            border: 1px solid #3a3a5c;
+        }
+
+        .welcome-title {
+            color: #ffffff;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .welcome-subtitle {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.875rem;
+            background: #1a1a2e;
+            border: 1px solid #4a4a6a;
+            border-radius: 6px;
+            color: #ffffff;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+        }
+
+        input[type="email"]::placeholder,
+        input[type="password"]::placeholder {
+            color: #6b7280;
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #3b82f6;
+        }
+
+        .remember-me label {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .forgot-password {
+            color: #3b82f6;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .forgot-password:hover {
+            color: #60a5fa;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 0.875rem;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .login-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            display: none;
+            border: 1px solid #fecaca;
+        }
+
+        .success-message {
+            background: #dcfce7;
+            color: #16a34a;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            display: none;
+            border: 1px solid #bbf7d0;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .spinner {
+            border: 3px solid #374151;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .admin-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #4a4a6a;
+        }
+
+        .admin-link a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .admin-link a:hover {
+            color: #60a5fa;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                margin: 1rem;
+                padding: 2rem;
+            }
+            
+            .header {
+                top: 1rem;
+                left: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-icon">📄</div>
+        <div class="header-text">CivicLens Authority</div>
+    </div>
+
+    <div class="login-container">
+        <div class="welcome-title">Welcome Back</div>
+        <div class="welcome-subtitle">Please sign in to access the dashboard.</div>
+
+        <div class="error-message" id="errorMessage"></div>
+        <div class="success-message" id="successMessage"></div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <input type="email" id="email" name="email" required placeholder="Email address">
+            </div>
+
+            <div class="form-group">
+                <input type="password" id="password" name="password" required placeholder="Password">
+            </div>
+
+            <div class="form-options">
+                <div class="remember-me">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Remember me</label>
+                </div>
+                <a href="#" class="forgot-password" onclick="showForgotPassword()">Forgot your password?</a>
+            </div>
+
+            <button type="submit" class="login-btn" id="loginBtn">
+                Sign in
+            </button>
+        </form>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Signing in...</p>
+        </div>
+
+        <div class="admin-link">
+            <a href="#" onclick="showAdminLogin()">Admin Login</a>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:4000';
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        function hideMessages() {
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        function setLoading(loading) {
+            const loginBtn = document.getElementById('loginBtn');
+            const loadingDiv = document.getElementById('loading');
+            
+            if (loading) {
+                loginBtn.disabled = true;
+                loadingDiv.style.display = 'block';
+            } else {
+                loginBtn.disabled = false;
+                loadingDiv.style.display = 'none';
+            }
+        }
+
+        function showAdminLogin() {
+            const email = prompt('Admin Email:');
+            if (email) {
+                document.getElementById('email').value = email;
+                const password = prompt('Admin Password:');
+                if (password) {
+                    document.getElementById('password').value = password;
+                    document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+                }
+            }
+        }
+
+        function showForgotPassword() {
+            alert('Please contact your system administrator to reset your password.');
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideMessages();
+            setLoading(true);
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/department`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    // Store token and department info
+                    localStorage.setItem('authToken', data.token);
+                    localStorage.setItem('department', JSON.stringify(data.department));
+                    
+                    showSuccess('Login successful! Redirecting...');
+                    
+                    // Redirect to department dashboard
+                    setTimeout(() => {
+                        window.location.href = 'department-dashboard.html';
+                    }, 1000);
+                } else {
+                    // Try admin login if department login fails
+                    if (email === 'admin@gccdemo.in') {
+                        const adminResponse = await fetch(`${API_BASE}/auth/admin`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ email, password }),
+                        });
+
+                        const adminData = await adminResponse.json();
+
+                        if (adminResponse.ok && adminData.success) {
+                            localStorage.setItem('authToken', adminData.token);
+                            localStorage.setItem('admin', JSON.stringify(adminData.admin));
+                            
+                            showSuccess('Admin login successful! Redirecting...');
+                            
+                            setTimeout(() => {
+                                window.location.href = 'admin-dashboard.html';
+                            }, 1000);
+                        } else {
+                            showError(adminData.error || 'Invalid admin credentials');
+                        }
+                    } else {
+                        showError(data.error || 'Invalid credentials');
+                    }
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showError('Network error. Please check if the server is running.');
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        // Check if already logged in
+        window.addEventListener('load', () => {
+            const token = localStorage.getItem('authToken');
+            const department = localStorage.getItem('department');
+            const admin = localStorage.getItem('admin');
+
+            if (token && department) {
+                window.location.href = 'department-dashboard.html';
+            } else if (token && admin) {
+                window.location.href = 'admin-dashboard.html';
+            }
+        });
+    </script>
+</body>
+</html>
