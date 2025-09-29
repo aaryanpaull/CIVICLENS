@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Report Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0b7ada",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101a22",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24
+        }
+    </style>
+<style>
+    body { min-height: max(884px, 100dvh); }
+    </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
+<div class="max-w-md mx-auto min-h-screen flex flex-col">
+<header class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800 relative">
+<button class="p-2" id="back-btn">
+<span class="material-symbols-outlined text-gray-900 dark:text-white">arrow_back</span>
+</button>
+<h1 class="text-lg font-bold text-gray-900 dark:text-white flex-1 text-center" data-i18n-key="report_details_title">Report Details</h1>
+<select data-lang-selector class="absolute right-4 top-4 rounded-full bg-background-dark/10 dark:bg-background-light/10 text-gray-900 dark:text-white text-xs px-2 py-1 border border-black/10 dark:border-white/10">
+  <option value="en">English</option>
+  <option value="hi">हिन्दी</option>
+  <option value="ta">தமிழ்</option>
+  <option value="te">తెలుగు</option>
+  <option value="bn">বাংলা</option>
+  <option value="kn">ಕನ್ನಡ</option>
+  <option value="gu">ગુજરાતી</option>
+</select>
+<div class="w-10"></div>
+</header>
+<main class="flex-grow overflow-y-auto">
+<div class="p-4 space-y-4">
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white" id="rd-title">Waste Management at Mambakkam Junction</h2>
+<div class="rounded-lg overflow-hidden">
+<img alt="Uploaded photo" id="rd-photo" class="w-full h-48 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_qNFEuqeQZTd5qkPYB_n-KbWHjR3NZaPvKw1sOypnmGc9gUrLy-sWpMA4t7yJ9caIgxRLVLtPnJfDHrt3PqsF2skw5WRuKJ_ZxnFF0xiG9SkhW8jGKPSSnxD6UyXj5Hy-b7Wd3cOj4IUpiHLYtO4DnbQnlzCakk0zyL01ZOWuxscI4ulroOlRkQuvtkIgFUojBwVZtk2dIF18UQv4UCRJEUdFQ9YgSuuo0FQCXCE2QZQWa-cirO8uZqFPtHG7945-sulzrMj_22ox"/>
+</div>
+<div class="rounded-lg overflow-hidden h-40" id="map-wrapper">
+<iframe id="rd-map" class="w-full h-full" style="border:0" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+<div class="space-y-6">
+<div class="relative flex gap-x-4">
+<div class="absolute left-5 top-5 -bottom-5 w-0.5 bg-gray-300 dark:bg-gray-700"></div>
+<div class="flex flex-col items-center z-10">
+<div class="flex items-center justify-center size-10 rounded-full bg-primary/20 dark:bg-primary/30">
+<span class="material-symbols-outlined text-primary">task_alt</span>
+</div>
+</div>
+<div class="flex-1 pb-6">
+<p class="font-semibold text-gray-900 dark:text-white">Report Submitted</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">Sep 22, 11:10 PM</p>
+</div>
+</div>
+<div class="relative flex gap-x-4">
+<div class="absolute left-5 top-5 -bottom-5 w-0.5 bg-gray-300 dark:bg-gray-700"></div>
+<div class="flex flex-col items-center z-10">
+<div class="flex items-center justify-center size-10 rounded-full bg-primary/20 dark:bg-primary/30">
+<span class="material-symbols-outlined text-primary">update</span>
+</div>
+</div>
+<div class="flex-1 pb-6">
+<p class="font-semibold text-gray-900 dark:text-white">Location</p>
+<p class="text-sm text-gray-500 dark:text-gray-400" id="rd-address">Fetching location…</p>
+</div>
+</div>
+<div class="relative flex gap-x-4">
+<div class="absolute left-5 top-5 -bottom-5 w-0.5 bg-gray-300 dark:bg-gray-700"></div>
+<div class="flex flex-col items-center z-10">
+<div class="flex items-center justify-center size-10 rounded-full bg-primary/20 dark:bg-primary/30">
+<span class="material-symbols-outlined text-primary">campaign</span>
+</div>
+</div>
+<div class="flex-1 pb-6">
+<p class="font-semibold text-gray-900 dark:text-white">Official Update</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">Sep 24, 2:15 PM</p>
+<div class="mt-2 p-3 rounded-lg bg-gray-100 dark:bg-gray-800">
+<p class="text-sm text-gray-700 dark:text-gray-300">"Report acknowledged by the Greater Chennai Corporation. Case ID: #78B42."</p>
+</div>
+</div>
+</div>
+<div class="relative flex gap-x-4">
+<div class="flex flex-col items-center z-10">
+<div class="flex items-center justify-center size-10 rounded-full bg-primary/20 dark:bg-primary/30">
+<span class="material-symbols-outlined text-primary">pending_actions</span>
+</div>
+</div>
+<div class="flex-1">
+<p class="font-semibold text-gray-900 dark:text-white">Status changed to IN PROGRESS</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">Sep 26, 10:00 AM</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<nav class="sticky bottom-0 bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-gray-800">
+<div class="flex justify-around p-2">
+<a class="flex flex-col items-center gap-1 p-2 text-gray-500 dark:text-gray-400" href="#" data-link="home">
+<span class="material-symbols-outlined">home</span>
+<span class="text-xs" data-i18n-key="nav_home">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-primary dark:text-primary" href="#" data-link="myreports">
+<span class="material-symbols-outlined">description</span>
+<span class="text-xs" data-i18n-key="nav_reports">My Reports</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-gray-500 dark:text-gray-400" href="#" data-link="map">
+<span class="material-symbols-outlined">map</span>
+<span class="text-xs" data-i18n-key="nav_map">Map</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-gray-500 dark:text-gray-400" href="#" data-link="impact">
+<span class="material-symbols-outlined">insights</span>
+<span class="text-xs" data-i18n-key="nav_impact">My Impact</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-gray-500 dark:text-gray-400" href="#" data-link="leaderboard">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="text-xs" data-i18n-key="nav_leaderboard">Leaderboard</span>
+</a>
+</div>
+</nav>
+</div>
+<script>
+  (function(){
+    document.getElementById('back-btn')?.addEventListener('click', function(e){ 
+      e.preventDefault(); 
+      if (window.MapsTo) { 
+        window.MapsTo('myreports'); 
+      } else { 
+        location.href = 'myreports.html'; 
+      } 
+    });
+    // Load captured image from localStorage
+    function loadCapturedImage() {
+      const reportPhoto = document.getElementById('rd-photo');
+      const savedImage = localStorage.getItem('lastCapturedImage');
+      const savedCategory = localStorage.getItem('lastCapturedCategory');
+      
+      if (savedImage && reportPhoto) {
+        reportPhoto.src = savedImage;
+        reportPhoto.alt = savedCategory ? `${savedCategory} report` : 'Uploaded photo';
+        console.log('Loaded captured image from localStorage');
+        
+        // Update the report title to match the captured category
+        const reportTitle = document.getElementById('rd-title');
+        if (reportTitle && savedCategory) {
+          reportTitle.textContent = `${savedCategory} Report`;
+        }
+      }
+    }
+
+    // Load image when page loads
+    loadCapturedImage();
+    // Bottom nav
+    document.querySelectorAll('[data-link]').forEach(link => {
+      link.addEventListener('click', function(e){
+        e.preventDefault();
+        const dest = this.getAttribute('data-link');
+        if (window.MapsTo) { window.MapsTo(dest); }
+        else { const mapToFile = { home: 'homepage.html', myreports: 'myreports.html', map: 'map.html', impact: 'myimpact.html', leaderboard: 'Leaderboard.html' }; location.href = mapToFile[dest] || 'homepage.html'; }
+      });
+    });
+
+    const addrEl = document.getElementById('rd-address');
+    const mapEl = document.getElementById('rd-map');
+
+    function setMap(lat, lon){
+      const zoom = 15;
+      const src = `https://www.openstreetmap.org/export/embed.html?bbox=${lon-0.01}%2C${lat-0.01}%2C${lon+0.01}%2C${lat+0.01}&layer=mapnik&marker=${lat}%2C${lon}`;
+      mapEl.src = src;
+    }
+
+    function setAddress(text){ addrEl.textContent = text; }
+
+    (async function init(){
+      let lat = parseFloat(localStorage.getItem('lastScanLat') || '');
+      let lon = parseFloat(localStorage.getItem('lastScanLon') || '');
+      const savedAddr = localStorage.getItem('lastScanAddr') || '';
+      if (!isFinite(lat) || !isFinite(lon)) {
+        if ('geolocation' in navigator) {
+          navigator.geolocation.getCurrentPosition((pos) => {
+            lat = pos.coords.latitude; lon = pos.coords.longitude;
+            setMap(lat, lon);
+            setAddress(savedAddr || `${lat.toFixed(5)}, ${lon.toFixed(5)}`);
+          }, () => {
+            setAddress('Location unavailable');
+          }, { enableHighAccuracy:true, timeout:8000, maximumAge:0 });
+        } else {
+          setAddress('Location unavailable');
+        }
+      } else {
+        setMap(lat, lon);
+        setAddress(savedAddr || `${lat.toFixed(5)}, ${lon.toFixed(5)}`);
+      }
+    })();
+  })();
+</script>
+<script src="./js/i18n.js"></script>
+<script>
+  (function(){ if (window.CivicI18n) window.CivicI18n.applyTranslations(); })();
+  </script>
+</body></html>
+

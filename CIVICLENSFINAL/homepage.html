@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Civic Report</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<style type="text/tailwindcss">
+    @keyframes pulse {
+      50% {
+        box-shadow: 0 0 0 20px rgba(59, 130, 246, 0.4);
+      }
+    }
+    @keyframes scan-line-animation {
+      0% {
+        top: -10%;
+        opacity: 0;
+      }
+      5%,
+      95% {
+        opacity: 1;
+      }
+      100% {
+        top: 110%;
+        opacity: 0;
+      }
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes glow {
+      0%,
+      100% {
+        box-shadow: 0 0 5px #ef4444, 0 0 10px #ef4444, 0 0 15px #ef4444;
+      }
+      50% {
+        box-shadow: 0 0 10px #ef4444, 0 0 20px #ef4444, 0 0 30px #ef4444;
+      }
+    }
+    @keyframes textGlow {
+      0%,
+      100% {
+        text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor;
+      }
+      50% {
+        text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
+      }
+    }
+    @keyframes meter-enter {
+      0% {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+    .meter-card-enter {
+      animation: meter-enter 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+    }
+    .meter-card-enter:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+    .meter-card-enter:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    .meter-card-enter:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+    body {
+      font-family: 'Public Sans', sans-serif;
+      min-height: 100dvh;
+    }
+    .animate-pulse-blue {
+      animation: pulse 2s infinite;
+    }
+    .animate-scan-line {
+      animation: scan-line-animation 2.5s ease-in-out;
+    }
+    .animate-glow-red {
+      animation: glow 1.5s infinite;
+    }
+    .animate-glow-amber {
+      animation: glowAmber 1.5s infinite;
+    }
+    .animate-glow-green {
+      animation: glowGreen 1.5s infinite;
+    }
+    @keyframes glowAmber {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+      }
+      50% {
+        box-shadow: 0 0 0 8px rgba(245, 158, 11, 0.4);
+      }
+    }
+    @keyframes glowGreen {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+      }
+      50% {
+        box-shadow: 0 0 0 8px rgba(34, 197, 94, 0.4);
+      }
+    }
+    .animate-text-glow {
+      animation: textGlow 2s infinite;
+    }
+    .severity-high {
+      border-color: #ef4444 !important;
+      box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.3), 0 0 20px rgba(239, 68, 68, 0.2);
+      animation: glowHigh 1.5s infinite;
+    }
+    @keyframes glowHigh {
+      0%, 100% {
+        box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.3), 0 0 20px rgba(239, 68, 68, 0.2);
+      }
+      50% {
+        box-shadow: 0 0 0 6px rgba(239, 68, 68, 0.5), 0 0 30px rgba(239, 68, 68, 0.4);
+      }
+    }
+    .severity-medium {
+      border-color: #f59e0b !important;
+      box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.3), 0 0 20px rgba(245, 158, 11, 0.2);
+      animation: glowMedium 1.5s infinite;
+    }
+    .severity-low {
+      border-color: #22c55e !important;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.3), 0 0 20px rgba(34, 197, 94, 0.2);
+      animation: glowLow 1.5s infinite;
+    }
+    @keyframes glowMedium {
+      0%, 100% {
+        box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.3), 0 0 20px rgba(245, 158, 11, 0.2);
+      }
+      50% {
+        box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.5), 0 0 30px rgba(245, 158, 11, 0.4);
+      }
+    }
+    @keyframes glowLow {
+      0%, 100% {
+        box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.3), 0 0 20px rgba(34, 197, 94, 0.2);
+      }
+      50% {
+        box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.5), 0 0 30px rgba(34, 197, 94, 0.4);
+      }
+    }
+    .initial-state,
+    .analyzing-state,
+    .analyzed-state {
+      display: none;
+    }
+    .state-initial .initial-state {
+      display: flex;
+    }
+    .state-analyzing .analyzing-state {
+      display: flex;
+    }
+    .state-analyzed .analyzed-state {
+      display: block;
+    }
+    .category-select-wrapper {
+      position: relative;
+      width: fit-content;
+    }
+    #category-selector {
+      transition: all 0.3s ease;
+    }
+    #category-selector.open+.category-options {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    #category-selector.open span.material-symbols-outlined:last-child {
+      transform: rotate(180deg);
+    }
+    .category-options {
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 0;
+      right: 0;
+      background-color: #1f2937;
+      border: 1px solid #374151;
+      border-radius: 0.75rem;
+      padding: 0.5rem;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-20px);
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      z-index: 50;
+      pointer-events: none;
+    }
+    #category-selector.open+.category-options .category-option {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .category-option {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      color: #d1d5db;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: background-color 0.2s ease, opacity 0.3s ease, transform 0.3s ease;
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    #category-selector.open+.category-options .category-option:nth-child(1) {
+      transition-delay: 0.05s;
+    }
+    #category-selector.open+.category-options .category-option:nth-child(2) {
+      transition-delay: 0.1s;
+    }
+    #category-selector.open+.category-options .category-option:nth-child(3) {
+      transition-delay: 0.15s;
+    }
+    #category-selector.open+.category-options .category-option:nth-child(4) {
+      transition-delay: 0.2s;
+    }
+    #category-selector.open+.category-options .category-option:nth-child(5) {
+      transition-delay: 0.25s;
+    }
+    #category-selector.open+.category-options .category-option:nth-child(6) {
+      transition-delay: 0.3s;
+    }
+    #category-selector.open+.category-options .category-option:nth-child(7) {
+      transition-delay: 0.35s;
+    }
+    #category-selector.open+.category-options .category-option:nth-child(8) {
+      transition-delay: 0.4s;
+    }
+    #category-selector.open+.category-options .category-option:nth-child(9) {
+      transition-delay: 0.45s;
+    }
+    #category-selector.open+.category-options .category-option:nth-child(10) {
+      transition-delay: 0.5s;
+    }
+    #category-selector.open+.category-options .category-option:nth-child(11) {
+      transition-delay: 0.55s;
+    }
+    #category-selector.open+.category-options .category-option:nth-child(12) {
+      transition-delay: 0.6s;
+    }
+    #category-selector.open+.category-options .category-option:nth-child(13) {
+      transition-delay: 0.65s;
+    }
+    #category-selector.open+.category-options .category-option:nth-child(14) {
+      transition-delay: 0.7s;
+    }
+    #category-selector.open+.category-options .category-option:nth-child(15) {
+      transition-delay: 0.75s;
+    }
+    .category-option:hover {
+      background-color: #374151;
+      color: white;
+    }
+    .category-option .material-symbols-outlined {
+      font-size: 24px;
+    }
+    .scan-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: #38bdf8;
+      box-shadow: 0 0 10px #38bdf8, 0 0 20px #38bdf8;
+      opacity: 0;
+    }
+    .severity-meter-container {
+      opacity: 0;
+      animation: fadeIn 0.5s ease-out forwards;
+    }
+    .state-analyzed .severity-meter-container {
+      animation-delay: 0.2s;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-gray-900 text-white flex flex-col state-initial pb-20" id="app-body">
+<div class="p-4 pt-6 z-10 w-full max-w-sm mx-auto">
+<!-- Header with centered title -->
+<header class="text-center mb-6">
+<h1 class="text-2xl font-bold text-white mb-2">CivicLens</h1>
+</header>
+<select data-lang-selector class="fixed right-4 top-4 z-40 bg-gray-800 text-white text-xs rounded-full px-3 py-1 border border-gray-700">
+  <option value="en">English</option>
+  <option value="hi">हिन्दी</option>
+  <option value="ta">தமிழ்</option>
+  <option value="te">తెలుగు</option>
+  <option value="bn">বাংলা</option>
+  <option value="kn">ಕನ್ನಡ</option>
+  <option value="gu">ગુજરાતી</option>
+</select>
+<div class="category-select-wrapper mx-auto">
+<button class="bg-gray-800 border border-gray-700 rounded-full px-6 py-3 text-white cursor-pointer flex items-center gap-3 w-full justify-between shadow-lg" id="category-selector">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined">widgets</span>
+<span class="font-medium" data-i18n-key="home_select_category">Select Category</span>
+</div>
+<span class="material-symbols-outlined ml-auto transition-transform duration-300">expand_more</span>
+</button>
+<div class="category-options w-full">
+<div class="category-option">
+<span class="material-symbols-outlined text-blue-400">road</span>
+<span data-i18n-key="category_roads">Roads</span>
+</div>
+<div class="category-option">
+<span class="material-symbols-outlined text-green-400">delete</span>
+<span data-i18n-key="category_waste">Waste Management</span>
+</div>
+<div class="category-option">
+<span class="material-symbols-outlined text-purple-400">apartment</span>
+<span data-i18n-key="category_infrastructure">Infrastructure</span>
+</div>
+<div class="category-option">
+<span class="material-symbols-outlined text-yellow-400">lightbulb</span>
+<span data-i18n-key="category_street_lighting">Street Lighting</span>
+</div>
+<div class="category-option">
+<span class="material-symbols-outlined text-cyan-400">water_drop</span>
+<span data-i18n-key="category_water_sewage">Water &amp; Sewage</span>
+</div>
+<div class="category-option">
+<span class="material-symbols-outlined text-orange-400">brush</span>
+<span data-i18n-key="category_vandalism">Vandalism</span>
+</div>
+<div class="category-option">
+<span class="material-symbols-outlined text-red-400">health_and_safety</span>
+<span data-i18n-key="category_health_sanitation">Public Health &amp; Sanitation</span>
+</div>
+<div class="category-option">
+<span class="material-symbols-outlined text-lime-400">park</span>
+<span data-i18n-key="category_parks_green">Parks &amp; Green Spaces</span>
+</div>
+<div class="category-option">
+<span class="material-symbols-outlined text-amber-400">home_work</span>
+<span data-i18n-key="category_encroachments">Encroachments</span>
+</div>
+<div class="category-option">
+<span class="material-symbols-outlined text-indigo-400">air</span>
+<span data-i18n-key="category_noise_air_pollution">Noise &amp; Air Pollution</span>
+</div>
+<div class="category-option">
+<span class="material-symbols-outlined text-teal-400">flood</span>
+<span data-i18n-key="category_flooding_drainage">Flooding &amp; Drainage</span>
+</div>
+<div class="category-option">
+<span class="material-symbols-outlined text-rose-400">traffic</span>
+<span data-i18n-key="category_traffic_parking">Traffic &amp; Parking Issues</span>
+</div>
+<div class="category-option">
+<span class="material-symbols-outlined text-yellow-500">power</span>
+<span data-i18n-key="category_electricity_power">Electricity &amp; Power Supply</span>
+</div>
+<div class="category-option">
+<span class="material-symbols-outlined text-sky-400">directions_bus</span>
+<span data-i18n-key="category_public_transport">Public Transport &amp; Bus Stops</span>
+</div>
+<div class="category-option">
+<span class="material-symbols-outlined text-blue-300">water</span>
+<span data-i18n-key="category_drinking_water">Drinking Water Quality</span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex-grow flex flex-col items-center justify-center p-6 space-y-8 -mt-16">
+<div class="flex-grow flex flex-col items-center justify-center w-full">
+<div class="initial-state flex-col items-center text-center space-y-4">
+<label class="relative w-64 h-64 rounded-full border-4 border-blue-500 flex items-center justify-center animate-pulse-blue cursor-pointer" for="camera-input" id="scan-button">
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-7xl text-blue-400">photo_camera</span>
+<p class="mt-2 text-blue-300 font-semibold" data-i18n-key="home_scan_button">Tap to Scan a Civic Issue</p>
+</div>
+</label>
+<input accept="image/*" capture="environment" class="hidden" id="camera-input" type="file"/>
+</div>
+<div class="analyzing-state flex-col items-center text-center space-y-4 w-full max-w-sm">
+<div class="relative w-64 h-64 mx-auto rounded-full overflow-hidden border-4 border-blue-500">
+<img alt="Captured issue" class="w-full h-full object-cover" id="captured-image-analyzing" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxnM0yHh5N2BP7w5FdEOt99OBB2X1D7gz-xDIRDQGtIY0Ap_iMDEcgNu9a3IMHbN2lYyg17J83dUPZsKTDFwg6AEKoFiWism2NlRtFMRi0R_QNEyEVnusdTwL8jUuDbaygDVHbJito3Y5kfrCqta8TBFyA-CU1Jc38ndOr7-_kKCmzmQcW8_4-yq-E1Gc2Xn0HLtDbueoR5DYcZUubRW8Vg8xRQgKJK-mdWNxAdDMjYU9CRIAuB57MaDoOAN-hwZztYojb64mkxmA3"/>
+<div class="scan-line animate-scan-line"></div>
+</div>
+<p class="mt-4 text-white font-semibold text-lg tracking-wider" data-i18n-key="home_analyzing">AI Analyzing...</p>
+</div>
+<div class="analyzed-state w-full max-w-sm space-y-6">
+<div class="relative w-64 h-64 mx-auto rounded-full overflow-hidden border-4 border-red-500">
+<img alt="Analyzed issue" class="w-full h-full object-cover" id="captured-image-analyzed" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQbjeLW8WqMb4zNic-O5y5d1-nn6fTsO0Yy7Dt6lVrcAbs4auxRgOnnkDC0Evt9n2qlVqioxqsDJkeR6dSszTljwD2fPUThiP8DotuQnlX4RGKU6kweDp4lrc22qJm2D0S5aAAvOqftYnJdvJsF3i5qOZlCOmFR_-d-G5lgoXKe8SJY4TK9J8BwoQxpaDJLVAZABJDIfpGjXR0FRX3TGhP61KgXq6wOjxhw1AHsJ36ZUX1ufGsbORO_YrFooJg7bQy8389ectd6Axy"/>
+</div>
+<div class="space-y-4">
+<div class="severity-meter-container">
+<p class="text-sm text-gray-400 text-center mb-2 font-medium" data-i18n-key="home_severity_meter">Severity Meter</p>
+<div class="grid grid-cols-3 gap-2 text-center">
+<div class="bg-gray-800/50 p-2 rounded-lg opacity-0 meter-card-enter">
+<p class="font-bold text-green-500/40">LOW</p>
+<p class="text-xs text-gray-500">Minor Issue</p>
+</div>
+<div class="bg-gray-800/50 p-2 rounded-lg opacity-0 meter-card-enter">
+<p class="font-bold text-amber-500/40">MEDIUM</p>
+<p class="text-xs text-gray-500">Moderate Issue</p>
+</div>
+<div class="bg-gray-800 p-2 rounded-lg border border-red-500 animate-glow-red opacity-0 meter-card-enter">
+<p class="font-bold text-red-500">HIGH</p>
+<p class="text-xs text-gray-500">Critical Issue</p>
+</div>
+</div>
+</div>
+<div class="text-center px-4 opacity-0 meter-card-enter" style="animation-delay: 0.4s;">
+<p class="text-gray-300 text-sm" id="location-title"><span class="font-semibold text-white">Auto Location:</span> Detected position</p>
+</div>
+<div class="bg-gray-800 p-4 rounded-xl mx-4 opacity-0 meter-card-enter" style="animation-delay: 0.3s;">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-blue-400 mt-1">psychology</span>
+<div class="flex-1">
+<p class="font-semibold text-white text-sm mb-1">AI Analysis</p>
+<p class="text-gray-300 text-sm" id="ai-description">Analyzing image...</p>
+</div>
+</div>
+</div>
+<div class="bg-gray-800 p-3 rounded-xl flex items-center gap-3 opacity-0 meter-card-enter" style="animation-delay: 0.5s;">
+<span class="material-symbols-outlined text-blue-400">location_on</span>
+<div>
+<p class="font-medium text-white text-sm" id="location-line">Fetching current location…</p>
+<p class="text-gray-400 text-xs" id="location-subline">Auto-Detected Location</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="w-full max-w-sm space-y-4 px-6">
+<button class="w-full h-14 rounded-full font-bold text-lg transition-all duration-300 bg-gray-700 text-gray-500 cursor-not-allowed" id="report-button" data-i18n-key="home_report_button">Report Issue</button>
+</div>
+</div>
+<nav class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700/80 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.3)]">
+<div class="flex justify-around max-w-md mx-auto">
+<a class="flex flex-col items-center justify-center text-white bg-blue-600/20 p-3 w-full" href="#" data-link="home">
+<span class="material-symbols-outlined">home</span>
+<span class="text-xs font-medium" data-i18n-key="nav_home">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-400 hover:text-white hover:bg-gray-800/60 p-3 transition-colors duration-200 w-full" href="#" data-link="myreports">
+<span class="material-symbols-outlined">history</span>
+<span class="text-xs font-medium" data-i18n-key="nav_reports">My Reports</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-400 hover:text-white hover:bg-gray-800/60 p-3 transition-colors duration-200 w-full" href="#" data-link="map">
+<span class="material-symbols-outlined">map</span>
+<span class="text-xs font-medium" data-i18n-key="nav_map">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-400 hover:text-white hover:bg-gray-800/60 p-3 transition-colors duration-200 w-full" href="#" data-link="impact">
+<span class="material-symbols-outlined">insights</span>
+<span class="text-xs font-medium" data-i18n-key="nav_impact">My Impact</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-400 hover:text-white hover:bg-gray-800/60 p-3 transition-colors duration-200 w-full" href="#" data-link="leaderboard">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="text-xs font-medium" data-i18n-key="nav_leaderboard">Leaderboard</span>
+</a>
+</div>
+</nav>
+<script>
+    const appBody = document.getElementById('app-body');
+    const cameraInput = document.getElementById('camera-input');
+    const capturedImageAnalyzing = document.getElementById('captured-image-analyzing');
+    const capturedImageAnalyzed = document.getElementById('captured-image-analyzed');
+    const reportButton = document.getElementById('report-button');
+    const categorySelector = document.getElementById('category-selector');
+    const categorySelectorText = categorySelector.querySelector('span.font-medium');
+    const locationLine = document.getElementById('location-line');
+    const locationSub = document.getElementById('location-subline');
+    const locationTitle = document.getElementById('location-title');
+
+    async function reverseGeocode(lat, lon) {
+      try {
+        const resp = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`);
+        if (!resp.ok) throw new Error('reverse geocode failed');
+        const data = await resp.json();
+        return data && (data.display_name || '');
+      } catch (_) { return ''; }
+    }
+
+    function formatCoords(lat, lon) {
+      return `${lat.toFixed(5)}, ${lon.toFixed(5)}`;
+    }
+
+    async function populateCurrentLocation() {
+      if (!('geolocation' in navigator)) {
+        locationLine.textContent = 'Location unavailable';
+        return;
+      }
+      locationLine.textContent = 'Fetching current location…';
+      navigator.geolocation.getCurrentPosition(async (pos) => {
+        const lat = pos.coords.latitude; const lon = pos.coords.longitude;
+        // Persist for use in report details
+        try {
+          localStorage.setItem('lastScanLat', String(lat));
+          localStorage.setItem('lastScanLon', String(lon));
+        } catch (_) {}
+        const pretty = await reverseGeocode(lat, lon);
+        try { if (pretty) localStorage.setItem('lastScanAddr', pretty); } catch(_){}
+        if (pretty) {
+          locationLine.textContent = pretty;
+          if (locationTitle) locationTitle.innerHTML = '<span class="font-semibold text-white">Location:</span> ' + pretty;
+          locationSub.textContent = 'Your Current Location';
+        } else {
+          const text = formatCoords(lat, lon);
+          locationLine.textContent = text;
+          if (locationTitle) locationTitle.innerHTML = '<span class="font-semibold text-white">Location:</span> ' + text;
+          locationSub.textContent = 'Your Current Location';
+        }
+      }, () => {
+        locationLine.textContent = 'Location permission denied';
+        locationSub.textContent = 'Enable location to auto-fill';
+      }, { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 });
+    }
+
+    // AI Analysis function using Google Gemini API
+    async function getAIAnalysis(base64ImageData, category) {
+      const API_KEY = 'AIzaSyDeAJ8qZ6LV70XXLTqpplhKNeu_NoG7fIM';
+      const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+      
+      const requestBody = {
+        "contents": [{
+          "parts": [
+            {
+              "text": `You are an AI expert for the CivicLens application, specializing in analyzing urban infrastructure problems from a single image. A user has selected the category '${category}' for the attached image. Your task is to: 1. Carefully analyze the image. 2. Determine the severity of the issue based on the selected category. 3. Write a concise, one-sentence summary of the issue and its potential risk. Your response MUST be a single, valid JSON object and nothing else. The JSON object must have exactly two keys: a 'severity' key, which must be one of three string values ('LOW', 'MEDIUM', or 'HIGH'), and a 'description' key, which must be a string containing your one-sentence summary. Example for a 'Roads' category image: {"severity": "HIGH", "description": "A deep pothole is visible, posing a significant risk to vehicle traffic."}`
+            },
+            {
+              "inline_data": {
+                "mime_type": "image/jpeg",
+                "data": base64ImageData
+              }
+            }
+          ]
+        }],
+        "generationConfig": {
+          "temperature": 0.1,
+          "maxOutputTokens": 200
+        }
+      };
+
+      try {
+        console.log('Sending AI analysis request...', { category, dataLength: base64ImageData.length });
+        
+        // Add timeout to prevent hanging
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody),
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        console.log('API Response status:', response.status);
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('API Error Response:', errorText);
+          throw new Error(`API request failed: ${response.status} - ${errorText}`);
+        }
+
+        const data = await response.json();
+        console.log('API Response data:', data);
+        
+        if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0]) {
+          const responseText = data.candidates[0].content.parts[0].text;
+          console.log('AI Response text:', responseText);
+          
+          try {
+            const parsedResult = JSON.parse(responseText);
+            console.log('Parsed AI result:', parsedResult);
+            return parsedResult;
+          } catch (parseError) {
+            console.error('JSON Parse Error:', parseError);
+            console.log('Raw response text:', responseText);
+            // Fallback: try to extract JSON from the response
+            const jsonMatch = responseText.match(/\{.*\}/s);
+            if (jsonMatch) {
+              return JSON.parse(jsonMatch[0]);
+            }
+            throw new Error('Failed to parse AI response as JSON');
+          }
+        } else {
+          console.error('Invalid API response structure:', data);
+          throw new Error('Invalid API response format');
+        }
+      } catch (error) {
+        console.error('AI Analysis Error:', error);
+        if (error.name === 'AbortError') {
+          console.log('AI analysis timed out, using fallback');
+        }
+        throw error;
+      }
+    }
+
+    // Function to update severity meter display
+    function updateSeverityMeter(severity) {
+      console.log('Updating severity meter with:', severity);
+      const severityCards = document.querySelectorAll('.severity-meter-container .grid > div');
+      const analyzedImage = document.getElementById('captured-image-analyzed');
+      console.log('Found severity cards:', severityCards.length);
+      
+      // Reset all cards and make them visible
+      severityCards.forEach((card, index) => {
+        card.classList.remove('bg-gray-800', 'border', 'border-red-500', 'border-amber-500', 'border-green-500', 'animate-glow-red', 'animate-glow-amber', 'animate-glow-green', 'opacity-0');
+        card.classList.add('bg-gray-800/50', 'opacity-100');
+        const text = card.querySelector('p');
+        const descText = card.querySelector('p:last-child');
+        if (text) {
+          text.classList.remove('text-red-500', 'text-amber-500', 'text-green-500', 'animate-text-glow');
+          text.classList.add('text-red-500/40', 'text-amber-500/40', 'text-green-500/40');
+        }
+        if (descText) {
+          descText.textContent = index === 0 ? 'Minor Issue' : index === 1 ? 'Moderate Issue' : 'Critical Issue';
+          descText.classList.remove('text-red-400', 'text-amber-400', 'text-green-400');
+        }
+        console.log(`Reset card ${index}:`, card.className);
+      });
+
+      // Reset image border classes
+      if (analyzedImage) {
+        analyzedImage.classList.remove('severity-high', 'severity-medium', 'severity-low');
+      }
+
+      // Highlight the appropriate severity level
+      if (severity === 'HIGH') {
+        severityCards[2].classList.remove('bg-gray-800/50', 'opacity-0');
+        severityCards[2].classList.add('bg-gray-800', 'border', 'border-red-500', 'animate-glow-red', 'opacity-100');
+        const text = severityCards[2].querySelector('p');
+        const descText = severityCards[2].querySelector('p:last-child');
+        if (text) {
+          text.classList.remove('text-red-500/40');
+          text.classList.add('text-red-500', 'animate-text-glow');
+        }
+        if (descText) {
+          descText.textContent = 'Critical Issue';
+          descText.classList.add('text-red-400');
+        }
+        // Apply red border to image
+        if (analyzedImage) {
+          analyzedImage.classList.add('severity-high');
+        }
+        console.log('Set HIGH severity on card 2');
+      } else if (severity === 'MEDIUM') {
+        severityCards[1].classList.remove('bg-gray-800/50', 'opacity-0');
+        severityCards[1].classList.add('bg-gray-800', 'border', 'border-amber-500', 'animate-glow-amber', 'opacity-100');
+        const text = severityCards[1].querySelector('p');
+        const descText = severityCards[1].querySelector('p:last-child');
+        if (text) {
+          text.classList.remove('text-amber-500/40');
+          text.classList.add('text-amber-500', 'animate-text-glow');
+        }
+        if (descText) {
+          descText.textContent = 'Moderate Issue';
+          descText.classList.add('text-amber-400');
+        }
+        // Apply yellow border to image
+        if (analyzedImage) {
+          analyzedImage.classList.add('severity-medium');
+        }
+        console.log('Set MEDIUM severity on card 1');
+      } else if (severity === 'LOW') {
+        severityCards[0].classList.remove('bg-gray-800/50', 'opacity-0');
+        severityCards[0].classList.add('bg-gray-800', 'border', 'border-green-500', 'animate-glow-green', 'opacity-100');
+        const text = severityCards[0].querySelector('p');
+        const descText = severityCards[0].querySelector('p:last-child');
+        if (text) {
+          text.classList.remove('text-green-500/40');
+          text.classList.add('text-green-500', 'animate-text-glow');
+        }
+        if (descText) {
+          descText.textContent = 'Minor Issue';
+          descText.classList.add('text-green-400');
+        }
+        // Apply green border to image
+        if (analyzedImage) {
+          analyzedImage.classList.add('severity-low');
+        }
+        console.log('Set LOW severity on card 0');
+      }
+    }
+
+    // Function to update description text
+    function updateDescription(description) {
+      console.log('Updating description with:', description);
+      const aiDescription = document.getElementById('ai-description');
+      if (aiDescription) {
+        aiDescription.textContent = description;
+        console.log('Updated AI description:', aiDescription.textContent);
+      } else {
+        console.error('AI description element not found');
+      }
+    }
+
+    // Fallback analysis function for when AI API fails
+    function getFallbackAnalysis(category) {
+      const fallbackResponses = {
+        'Roads': {
+          severity: 'HIGH',
+          description: 'Road infrastructure issue detected that requires immediate attention from city authorities.'
+        },
+        'Waste Management': {
+          severity: 'MEDIUM',
+          description: 'Waste management issue identified that affects local sanitation and public health.'
+        },
+        'Infrastructure': {
+          severity: 'HIGH',
+          description: 'Infrastructure problem detected that may impact community safety and accessibility.'
+        },
+        'Street Lighting': {
+          severity: 'MEDIUM',
+          description: 'Street lighting issue identified that affects nighttime visibility and public safety.'
+        },
+        'Water & Sewage': {
+          severity: 'HIGH',
+          description: 'Water or sewage issue detected that requires urgent attention to prevent health hazards.'
+        },
+        'Vandalism': {
+          severity: 'MEDIUM',
+          description: 'Vandalism or property damage observed that affects community aesthetics and safety.'
+        },
+        'Public Health & Sanitation': {
+          severity: 'HIGH',
+          description: 'Public health concern identified that may pose risks to community well-being.'
+        },
+        'Parks & Green Spaces': {
+          severity: 'LOW',
+          description: 'Park or green space maintenance issue that affects community recreation and environment.'
+        },
+        'Encroachments': {
+          severity: 'MEDIUM',
+          description: 'Encroachment issue detected that may violate city regulations and affect public access.'
+        },
+        'Noise & Air Pollution': {
+          severity: 'MEDIUM',
+          description: 'Environmental pollution concern identified that may impact community health and quality of life.'
+        },
+        'Flooding & Drainage': {
+          severity: 'HIGH',
+          description: 'Drainage or flooding issue detected that requires immediate attention to prevent water damage.'
+        },
+        'Traffic & Parking Issues': {
+          severity: 'MEDIUM',
+          description: 'Traffic or parking problem identified that affects local mobility and road safety.'
+        },
+        'Electricity & Power Supply': {
+          severity: 'HIGH',
+          description: 'Electrical or power supply issue detected that may impact public safety and services.'
+        },
+        'Public Transport & Bus Stops': {
+          severity: 'MEDIUM',
+          description: 'Public transport infrastructure issue identified that affects community mobility and accessibility.'
+        },
+        'Drinking Water Quality': {
+          severity: 'HIGH',
+          description: 'Drinking water quality concern detected that may pose health risks to the community.'
+        }
+      };
+
+      return fallbackResponses[category] || {
+        severity: 'MEDIUM',
+        description: 'Civic issue detected in the selected category that requires attention from local authorities.'
+      };
+    }
+
+
+    cameraInput.addEventListener('change', async (event) => {
+      if (event.target.files && event.target.files[0]) {
+        // Check if category is selected
+        const selectedCategoryKey = categorySelector.getAttribute('data-selected-category');
+        const selectedCategory = categorySelectorText.textContent;
+        if (!selectedCategoryKey || selectedCategory === 'Select Category') {
+          alert('Please select a category before uploading an image.');
+          return;
+        }
+        
+        // Get the English category name for AI analysis
+        const categoryMap = {
+          'category_roads': 'Roads',
+          'category_waste': 'Waste Management',
+          'category_infrastructure': 'Infrastructure',
+          'category_street_lighting': 'Street Lighting',
+          'category_water_sewage': 'Water & Sewage',
+          'category_vandalism': 'Vandalism',
+          'category_health_sanitation': 'Public Health & Sanitation',
+          'category_parks_green': 'Parks & Green Spaces',
+          'category_encroachments': 'Encroachments',
+          'category_noise_air_pollution': 'Noise & Air Pollution',
+          'category_flooding_drainage': 'Flooding & Drainage',
+          'category_traffic_parking': 'Traffic & Parking Issues',
+          'category_electricity_power': 'Electricity & Power Supply',
+          'category_public_transport': 'Public Transport & Bus Stops',
+          'category_drinking_water': 'Drinking Water Quality'
+        };
+        
+        const englishCategoryName = categoryMap[selectedCategoryKey] || selectedCategory;
+
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+          const imageUrl = e.target.result;
+          capturedImageAnalyzing.src = imageUrl;
+          capturedImageAnalyzed.src = imageUrl;
+          
+          // Save image to localStorage for use in other pages
+          try {
+            localStorage.setItem('lastCapturedImage', imageUrl);
+            localStorage.setItem('lastCapturedCategory', selectedCategory);
+            console.log('Image saved to localStorage');
+          } catch (error) {
+            console.error('Failed to save image to localStorage:', error);
+          }
+          
+          // Convert to base64 for API
+          const base64Data = imageUrl.split(',')[1]; // Remove data:image/jpeg;base64, prefix
+          
+          appBody.classList.remove('state-initial');
+          appBody.classList.add('state-analyzing');
+
+          try {
+            // Call AI analysis
+            const aiResult = await getAIAnalysis(base64Data, englishCategoryName);
+            
+            // Validate AI result
+            if (!aiResult || !aiResult.severity || !aiResult.description) {
+              throw new Error('Invalid AI response format');
+            }
+            
+            // Update UI with AI results
+            updateSeverityMeter(aiResult.severity);
+            updateDescription(aiResult.description);
+            
+            // Make severity meter visible
+            const severityContainer = document.querySelector('.severity-meter-container');
+            if (severityContainer) {
+              severityContainer.style.opacity = '1';
+            }
+            
+            // Switch to analyzed state
+            appBody.classList.remove('state-analyzing');
+            appBody.classList.add('state-analyzed');
+            
+            // Get current location
+            populateCurrentLocation();
+            
+            // Enable report button
+            setTimeout(() => {
+              reportButton.classList.remove('bg-gray-700', 'text-gray-500', 'cursor-not-allowed');
+              reportButton.classList.add('bg-blue-600', 'hover:bg-blue-700', 'text-white', 'cursor-pointer');
+            }, 700);
+            
+          } catch (error) {
+            console.error('AI Analysis failed:', error);
+            
+            // Use fallback analysis instead of showing error
+            console.log('Using fallback analysis...');
+            
+            // Generate fallback response based on category
+            const fallbackResponse = getFallbackAnalysis(englishCategoryName);
+            
+            // Update UI with fallback results
+            updateSeverityMeter(fallbackResponse.severity);
+            updateDescription(fallbackResponse.description);
+            
+            // Make severity meter visible
+            const severityContainer = document.querySelector('.severity-meter-container');
+            if (severityContainer) {
+              severityContainer.style.opacity = '1';
+            }
+            
+            // Switch to analyzed state
+            appBody.classList.remove('state-analyzing');
+            appBody.classList.add('state-analyzed');
+            
+            // Get current location
+            populateCurrentLocation();
+            
+            // Enable report button
+            setTimeout(() => {
+              reportButton.classList.remove('bg-gray-700', 'text-gray-500', 'cursor-not-allowed');
+              reportButton.classList.add('bg-blue-600', 'hover:bg-blue-700', 'text-white', 'cursor-pointer');
+            }, 700);
+          }
+        }
+        reader.readAsDataURL(event.target.files[0]);
+        event.target.value = ''; // Reset file input to allow re-uploading the same file
+      }
+    });
+    categorySelector.addEventListener('click', (e) => {
+      e.stopPropagation();
+      categorySelector.classList.toggle('open');
+    });
+    document.querySelectorAll('.category-option').forEach(option => {
+      option.addEventListener('click', () => {
+        const text = option.querySelector('span:not(.material-symbols-outlined)').textContent;
+        const icon = option.querySelector('.material-symbols-outlined').textContent;
+        categorySelectorText.textContent = text;
+        categorySelector.querySelector('.material-symbols-outlined:first-child').textContent = icon;
+        categorySelector.classList.remove('open');
+        
+        // Store the original English text for AI analysis
+        const originalText = option.querySelector('span:not(.material-symbols-outlined)').getAttribute('data-i18n-key');
+        if (originalText) {
+          categorySelector.setAttribute('data-selected-category', originalText);
+        }
+      });
+    });
+    document.addEventListener('click', (e) => {
+      const isClickInside = categorySelector.parentElement.contains(e.target);
+      if (!isClickInside) {
+        categorySelector.classList.remove('open');
+      }
+    });
+
+    document.querySelectorAll('[data-link]').forEach(link => {
+      link.addEventListener('click', function(e){
+        e.preventDefault();
+        const dest = this.getAttribute('data-link');
+        if (window.MapsTo) {
+          window.MapsTo(dest);
+        } else {
+          const mapToFile = { home: 'homepage.html', myreports: 'myreports.html', map: 'map.html', impact: 'myimpact.html', leaderboard: 'Leaderboard.html' };
+          location.href = mapToFile[dest] || 'homepage.html';
+        }
+      });
+    });
+
+    reportButton.addEventListener('click', function(e){
+      if (reportButton.classList.contains('cursor-not-allowed')) return;
+      e.preventDefault();
+      if (window.MapsTo) { window.MapsTo('reportconfirmation'); }
+      else { location.href = 'reportconfirmation.html'; }
+    });
+  </script>
+
+<script src="./js/i18n.js"></script>
+<script>
+  (function(){ if (window.CivicI18n) window.CivicI18n.applyTranslations(); })();
+  </script>
+
+</body></html>
+

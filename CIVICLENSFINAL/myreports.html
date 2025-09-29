@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Reports</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#0b7ada",
+              "background-light": "#f5f7f8",
+              "background-dark": "#101a22",
+            },
+            fontFamily: {
+              "display": ["Space Grotesk"]
+            },
+            borderRadius: {
+              "DEFAULT": "0.25rem",
+              "lg": "0.5rem",
+              "xl": "0.75rem",
+              "full": "9999px"
+            },
+          },
+        },
+      }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<style>
+      .status-pending {
+        background-color: #f59e0b;
+        color: #fff;
+      }
+      .status-in-progress {
+        background-color: #3b82f6;
+        color: #fff;
+      }
+      .status-resolved {
+        background-color: #22c55e;
+        color: #fff;
+      }
+      body {
+        font-family: 'Space Grotesk', sans-serif;
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col justify-between overflow-x-hidden">
+<div class="flex-grow">
+<header class="sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
+<div class="flex items-center p-4">
+<button class="text-slate-800 dark:text-white" id="back-btn">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="flex-1 text-center text-lg font-bold text-slate-900 dark:text-white pr-8" data-i18n-key="my_reports_title">My Reports</h1>
+<select data-lang-selector class="absolute right-4 top-4 rounded-full bg-background-dark/10 dark:bg-background-light/10 text-slate-800 dark:text-white text-xs px-2 py-1 border border-black/10 dark:border-white/10"></select>
+</div>
+<div class="flex gap-2 px-4 pb-3" id="filter-tabs">
+<button class="flex-1 rounded-full bg-primary px-4 py-2 text-sm font-medium text-white" data-i18n-key="my_reports_all">All</button>
+<button class="flex-1 rounded-full bg-slate-200 dark:bg-slate-800 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300" data-i18n-key="my_reports_in_progress">In Progress</button>
+<button class="flex-1 rounded-full bg-slate-200 dark:bg-slate-800 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300" data-i18n-key="my_reports_resolved">Resolved</button>
+</div>
+</header>
+<main class="flex flex-col gap-3 p-4">
+<div class="rounded-lg bg-slate-100 dark:bg-slate-900/50 p-3 shadow-sm report-card hover:shadow-md transition-shadow cursor-pointer" data-status="resolved">
+<div class="flex items-start gap-4">
+<div class="h-20 w-20 flex-shrink-0">
+<img alt="Recent report" class="h-full w-full rounded-lg object-cover" id="recent-report-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxKzabh5UelxnnkoldCLIjOkIcPMtLfAcpNOw1xKvL2g2Vq4VkP8QkVJibQf7aaNN3C5dewChCp55AQ73K7-rCEK79rqfroLw4CnLi1yVJIftAJlBBpm6KZUdNMbuXVfKcrQJL7KQeEOv-047-66k79oJFeBb47xjPRyHA7RPQXsdUN62tgJd857VdtDP4jfhGkyzE2O49ODn1_fzJa9Z5ErYj24hzS3zyEYYxQMeJ8k-S_KMHpw_flEgcyNKuUX65gj7504SSxsIz"/>
+</div>
+<div class="flex-1">
+<p class="font-bold text-slate-800 dark:text-white" id="recent-report-title">Pothole</p>
+<p class="text-sm text-slate-600 dark:text-slate-400" id="recent-report-location">Vengadamangalam Main Rd</p>
+<p class="text-xs text-slate-500 dark:text-slate-500 mt-1" id="recent-report-date">Reported on Sep 22, 2025</p>
+</div>
+<div class="flex-shrink-0">
+<span class="rounded-full px-3 py-1 text-xs font-semibold status-resolved">RESOLVED</span>
+</div>
+</div>
+</div>
+<div class="rounded-lg bg-slate-100 dark:bg-slate-900/50 p-3 shadow-sm report-card hover:shadow-md transition-shadow cursor-pointer" data-status="in-progress">
+<div class="flex items-start gap-4">
+<div class="h-20 w-20 flex-shrink-0">
+<img alt="Streetlight Outage report" class="h-full w-full rounded-lg object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgyzTcw_CY83tMkeUPsq3K9sGhAYEE4dwZasK_PhnSY-qPkGVt0Q-TB_rlohDPz6AlwrwpOsa65BsbgS7S_xP-3WoKdfTHTRv5ElenpJ0o1RXsZWCuOksuN5kGzIGdromvqkjrTYpQSoh-BPmy8IWEM6tSCL4dyRazEw5pR2Co-hEBi0IzFbSZWnONVWvA355gzBifSfAZT4jBTy9Lyi5qflJRFQJObj_1-5oSC_sskSkqAoCqnOH3v9TCCZQapQTHzrgEzLsLnnjF"/>
+</div>
+<div class="flex-1">
+<p class="font-bold text-slate-800 dark:text-white">Streetlight Outage</p>
+<p class="text-sm text-slate-600 dark:text-slate-400">Gandhi Nagar</p>
+<p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Reported on Sep 18, 2025</p>
+</div>
+<div class="flex-shrink-0">
+<span class="rounded-full px-3 py-1 text-xs font-semibold status-in-progress">IN PROGRESS</span>
+</div>
+</div>
+</div>
+<div class="rounded-lg bg-slate-100 dark:bg-slate-900/50 p-3 shadow-sm report-card hover:shadow-md transition-shadow cursor-pointer" data-status="pending">
+<div class="flex items-start gap-4">
+<div class="h-20 w-20 flex-shrink-0">
+<img alt="Garbage Dump report" class="h-full w-full rounded-lg object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABzLeHk1vYRZhJ49Ey9grKCjGVK6zUIu3_vl74VbMvdOL4SfQgz3TUn0dLv0jq2fB_IUzOiAy9xWPWI71FqudtvYpCXNk4btEYagIBOsTeG4DOW8Qq5fx3Em6s0kHdOastN0c_jjPjY6G2kDahSRXOJDrz2U-Zx7ARbMP1H92DvbLvR6L9ejeH-jCYsT2pRbAw9ptdxSBUu1f107IVWnPQy_wnehLaHMJbDPxmk1XAwF-plUXRBbRqjBvWKTTcOposHR9zOjWJmpla"/>
+</div>
+<div class="flex-1">
+<p class="font-bold text-slate-800 dark:text-white">Garbage Dump</p>
+<p class="text-sm text-slate-600 dark:text-slate-400">Near Bus Stop</p>
+<p class="text-xs text-slate-500 dark:text-slate-500 mt-1">Reported on Sep 15, 2025</p>
+</div>
+<div class="flex-shrink-0">
+<span class="rounded-full px-3 py-1 text-xs font-semibold status-pending">PENDING</span>
+</div>
+</div>
+</div>
+</main>
+</div>
+<footer class="sticky bottom-0 border-t border-slate-200/50 dark:border-slate-800/50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm pb-safe">
+<nav class="flex justify-around p-2">
+<a class="flex flex-col items-center gap-1 p-2 text-slate-500 dark:text-slate-400" href="#" data-link="home"><span class="material-symbols-outlined">home</span><span class="text-xs font-medium" data-i18n-key="nav_home">Home</span></a>
+<a class="flex flex-col items-center gap-1 rounded-full bg-primary/10 dark:bg-primary/20 p-2 px-4 text-primary" href="#" data-link="myreports"><span class="material-symbols-outlined">description</span><span class="text-xs font-medium" data-i18n-key="nav_reports">My Reports</span></a>
+<a class="flex flex-col items-center gap-1 p-2 text-slate-500 dark:text-slate-400 text-center" href="#" data-link="map"><span class="material-symbols-outlined">map</span><span class="text-xs font-medium" data-i18n-key="nav_map">Map</span></a>
+<a class="flex flex-col items-center gap-1 p-2 text-slate-500 dark:text-slate-400" href="#" data-link="impact"><span class="material-symbols-outlined">insights</span><span class="text-xs font-medium" data-i18n-key="nav_impact">My Impact</span></a>
+<a class="flex flex-col items-center gap-1 p-2 text-slate-500 dark:text-slate-400" href="#" data-link="leaderboard"><span class="material-symbols-outlined">leaderboard</span><span class="text-xs font-medium" data-i18n-key="nav_leaderboard">Leaderboard</span></a>
+</nav>
+</footer>
+</div>
+
+<script>
+  (function(){
+    document.getElementById('back-btn')?.addEventListener('click', function(e){ 
+      e.preventDefault(); 
+      if (window.MapsTo) { 
+        window.MapsTo('home'); 
+      } else { 
+        location.href = 'homepage.html'; 
+      } 
+    });
+    // Load captured image from localStorage
+    function loadCapturedImage() {
+      const recentImage = document.getElementById('recent-report-image');
+      const savedImage = localStorage.getItem('lastCapturedImage');
+      const savedCategory = localStorage.getItem('lastCapturedCategory');
+      const savedAddress = localStorage.getItem('lastScanAddr');
+      
+      if (savedImage && recentImage) {
+        recentImage.src = savedImage;
+        recentImage.alt = savedCategory ? `${savedCategory} report` : 'Recent report';
+        console.log('Loaded captured image from localStorage');
+        
+        // Update the report title to match the captured category
+        const reportTitle = document.getElementById('recent-report-title');
+        const reportLocation = document.getElementById('recent-report-location');
+        
+        if (reportTitle && savedCategory) {
+          reportTitle.textContent = savedCategory;
+        }
+        
+        if (reportLocation && savedAddress) {
+          reportLocation.textContent = savedAddress;
+        } else if (reportLocation) {
+          reportLocation.textContent = 'Current Location';
+        }
+        
+        // Update the date to current date
+        const reportDate = document.getElementById('recent-report-date');
+        if (reportDate) {
+          const today = new Date();
+          const dateString = today.toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'short', 
+            day: 'numeric' 
+          });
+          reportDate.textContent = `Reported on ${dateString}`;
+        }
+      }
+    }
+
+    // Load image when page loads
+    loadCapturedImage();
+    document.querySelectorAll('.report-card').forEach(card => { card.style.cursor = 'pointer'; card.addEventListener('click', function(e){ e.preventDefault(); if (window.MapsTo) { window.MapsTo('reportdetails'); } else { location.href = 'reportdetails.html'; } }); });
+
+    const tabsContainer = document.getElementById('filter-tabs');
+    const tabButtons = Array.from(tabsContainer.querySelectorAll('button'));
+    
+    function setActive(btn){ 
+      tabButtons.forEach(b => { 
+        b.classList.remove('bg-primary', 'text-white'); 
+        b.classList.add('bg-slate-200','dark:bg-slate-800','text-slate-700','dark:text-slate-300'); 
+      }); 
+      btn.classList.add('bg-primary','text-white'); 
+      btn.classList.remove('bg-slate-200','dark:bg-slate-800','text-slate-700','dark:text-slate-300'); 
+    }
+    
+    function applyFilter(type){ 
+      document.querySelectorAll('.report-card').forEach(card => { 
+        const status = card.getAttribute('data-status');
+        const show = (type === 'all') || (type === 'resolved' && status === 'resolved') || (type === 'in-progress' && status === 'in-progress') || (type === 'pending' && status === 'pending');
+        card.style.display = show ? 'block' : 'none';
+      }); 
+    }
+    
+    tabButtons[0].addEventListener('click', (e) => { e.preventDefault(); setActive(tabButtons[0]); applyFilter('all'); });
+    tabButtons[1].addEventListener('click', (e) => { e.preventDefault(); setActive(tabButtons[1]); applyFilter('in-progress'); });
+    tabButtons[2].addEventListener('click', (e) => { e.preventDefault(); setActive(tabButtons[2]); applyFilter('resolved'); });
+
+    document.querySelectorAll('footer [data-link]').forEach(link => { link.addEventListener('click', function(e){ e.preventDefault(); const dest = this.getAttribute('data-link'); if (window.MapsTo) { window.MapsTo(dest); } else { const mapToFile = { home: 'homepage.html', myreports: 'myreports.html', map: 'map.html', impact: 'myimpact.html', leaderboard: 'Leaderboard.html' }; location.href = mapToFile[dest] || 'homepage.html'; } }); });
+  })();
+</script>
+<script src="./js/i18n.js"></script>
+<script>
+  (function(){ if (window.CivicI18n) window.CivicI18n.applyTranslations(); })();
+  </script>
+
+</body></html>
+
